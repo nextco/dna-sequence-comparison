@@ -276,7 +276,7 @@ int main(int argc, const char* argv[]) {
   	auto t2 = chrono::high_resolution_clock::now();
 
   	cout << endl << "S: " << endl;
-    imprimir_matriz_header(matrix_s, n + 1, m + 1, v, w);
+    imprimir_matriz_header(matrix_s, n + 1, m + 1, v, w); // n + 1: filas, m + 1: columnas
     cout << endl << "b: " << endl;
 	imprimir_matriz_string(matrix_b, n + 1, m + 1 );
 
