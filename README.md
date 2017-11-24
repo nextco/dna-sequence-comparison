@@ -23,7 +23,7 @@ lcs-dp.cpp < input.data <br/>
 
 ## Results
 <br/>
-![](img/future.png)<br/>
+![](img/lcs-dp.png)<br/>
 ![](img/future.png)<br/>
 ![](img/future.png)
 

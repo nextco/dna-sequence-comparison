@@ -184,8 +184,8 @@ void lcs_dp(char *&v, char *&w, int n, int m, int **& matrix_s, string **& matri
 	filas = n + 1; // w en las filas
 	columnas = m + 1; // v en las columnas
 
-	cout << "filas: " << filas << endl; // v - n - columnas; w - m - filas
-	cout << "columnas: " << columnas << endl;
+	// cout << "filas: " << filas << endl; // v - n - columnas; w - m - filas
+	// cout << "columnas: " << columnas << endl;
 
 	// Init
 	init_matriz_s(matrix_s, filas, columnas );
@@ -253,7 +253,7 @@ void imprimir_lcs(string **& b, char *&v, int i, int j ){
 
 
 int main(int argc, const char* argv[]) {	
-	cout << endl << "./dp.exe < lcs.data" <<  endl;
+	cout << endl << "./lcs-dp.exe < lcs.data" <<  endl;
 
 	int** matrix_s = nullptr; // S
 	string** matrix_b = nullptr; // b
@@ -275,15 +275,16 @@ int main(int argc, const char* argv[]) {
   	lcs_dp(v, w, n, m, matrix_s, matrix_b);
   	auto t2 = chrono::high_resolution_clock::now();
 
-  	cout << "S: " << endl;
+  	cout << endl << "S: " << endl;
     imprimir_matriz_header(matrix_s, n + 1, m + 1, v, w);
-    cout << "b: " << endl;
+    cout << endl << "b: " << endl;
 	imprimir_matriz_string(matrix_b, n + 1, m + 1 );
 
 	// cout << "matrix_b[7][8]: " << matrix_b[7][8] << endl;
 
-	cout << "imprimir_lcs: " << endl;
+	cout << endl << "imprimir_lcs: " ;
 	imprimir_lcs(matrix_b, v, n , m); cout << endl;
+	cout << "tamano_lcs: " << matrix_s[n][m] << endl;
 
 	// cout << endl << "maxima distancia = " <<  maxima_distancia << endl; 
 	cout << "Tiempo ejecucion (ns) = " << chrono::duration_cast<chrono::nanoseconds>(t2-t1).count() << endl;
