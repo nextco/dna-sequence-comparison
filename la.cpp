@@ -1,4 +1,4 @@
-// Bug lcs.data
+// Bug lcs-a.data
 // Alineamiento Local
 #include <iostream> // cout 
 #include <algorithm> // max
@@ -316,9 +316,21 @@ void obtener_alineacion(char *&v, int n, char *&w, int m, string &alinea_vl, str
 	cout << "obtener_alineacion -> " << endl;
 	alinea_vl = ""; alinea_wl = "";
 
-	int i = 0;
-	int j = 0;
+	// Quick Bug Fix
+	if(max_secuencia.length() == 1){
+		// Copiar secuencias
+		for (int i = 0; i != n; i++){
+			alinea_vl.push_back( v[i] );
+		}
 
+		for (int j = 0; j != m; j++){
+			alinea_wl.push_back( w[j] );
+		}
+		return;
+	}	
+
+	int i = 0;
+	int j = 0;	
 	// Posible restricción cadenas de igual tamaño
 	while(i != n){
 
