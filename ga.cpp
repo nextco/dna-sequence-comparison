@@ -220,6 +220,14 @@ void obtener_p(int **& p, int filas, int columnas, char *&v, char *&w){
     }
 }
 
+int maximo(int a, int b){
+	if( a > b ){
+		return a;
+	}else{
+		return b;
+	}
+}
+
 void calcular_similaridad(char *&v, char *&w, int n, int m, int g, int **& p, int **& S){
 	// Primero se lee v luego w
 	cout << "calcular_similaridad -> " << endl;
@@ -253,35 +261,24 @@ void calcular_similaridad(char *&v, char *&w, int n, int m, int g, int **& p, in
 	cout << endl << "p: " << endl;
 	imprimir_matriz_header_s(p, filas, columnas, v, w );
 
-
-}
-
-/*
-
-		
-	// Linea 5 - 
+	// cout << "maximo(5,3,4): " << maximo(5, maximo(3, 4)) << endl;
+	// Linea 7	
 	for(int i = 1; i < filas; i++){
 		for(int j = 1; j < columnas; j++){
-			if( comparar_char(v, w, i - 1, j - 1) ){ // :S
-				matrix_s[i][j] = matrix_s[i-1][j-1] + 1;
-				matrix_b[i][j] = "D"; // Diagonal
-			}else if( matrix_s[i-1][j] >= matrix_s[i][j - 1] ){
-				matrix_s[i][j] = matrix_s[i-1][j];
-				matrix_b[i][j] = "U"; // Up - Eliminación
-			}else{
-				matrix_s[i][j] = matrix_s[i][j-1];
-				matrix_b[i][j] = "L"; // Izquierda - Insercion
-			}			
+			int a = S[i-1][j-1] + p[i][j];
+			int b = S[i][j-1] + g;
+			int c = S[i-1][j] + g;
+
+			S[i][j] = maximo( a, maximo(b, c) );
 	    }
     }
-
-    // cout << "S: " << endl;
-    // imprimir_matriz_int(matrix_s, filas, columnas );
-    // cout << "b: " << endl;
-	// imprimir_matriz_string(matrix_b, filas, columnas );
+	
+	cout << endl << "S: " << endl;
+	imprimir_matriz_header_s(S, filas, columnas, v, w );
 
 }
-*/
+
+
 
 // Pag 176 
 void imprimir_lcs(string **& b, char *&v, int i, int j ){	
