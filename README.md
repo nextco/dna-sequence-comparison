@@ -2,7 +2,7 @@
 
 Implement the algorithms Hamming Distance, Longest Common Subsequence.<br/>
 <p align="center">
-  <img src="img/banner.png" />
+  <img src="img/lcs-dp.png" />
 </p>
 
 
@@ -23,7 +23,8 @@ lcs-dp.cpp < input.data <br/>
 
 ## Results
 <br/>
-![](img/lcs-dp.png)<br/>
+
+![](./img/lcs-dp.png)<br/>
 ![](img/future.png)<br/>
 ![](img/future.png)
 
