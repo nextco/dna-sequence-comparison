@@ -2,7 +2,7 @@
 
 Implement the algorithms Hamming Distance, Longest Common Subsequence.<br/>
 <p align="center">
-  <img src="img/lcs-dp.png" />
+  <img src="img/banner.png" />
 </p>
 
 
