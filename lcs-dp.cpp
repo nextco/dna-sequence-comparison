@@ -72,7 +72,17 @@ void leer_sequencias(char *&a, char *&b, int &n, int &m ){
 }
 
 
-void imprimir_matriz(int **& matrix, int filas, int columnas){
+void imprimir_matriz_int(int **& matrix, int filas, int columnas){
+    // cout << "imprimir_matriz_int -> " << endl;
+    for(int i = 0; i != filas; i++){
+        for(int j = 0; j != columnas; j++){
+        	cout << matrix[i][j] << " ";
+        }            
+        cout << endl;
+    }
+}
+
+void imprimir_matriz_string(string **& matrix, int filas, int columnas){
     // cout << "imprimir_matriz -> " << endl;
     for(int i = 0; i != filas; i++){
         for(int j = 0; j != columnas; j++){
@@ -108,8 +118,8 @@ void imprimir_matriz_header(int **& matrix, int filas, int columnas, char *&v, c
     }
 }
 
-void init_matriz(int **&matrix, int filas, int columnas){
-    cout << "init_matriz -> " << endl;
+void init_matriz_s(int **&matrix, int filas, int columnas){
+    // cout << "init_matriz_s -> " << endl;
     int sequencial = 0;
     
     matrix = new int*[filas];
@@ -119,6 +129,19 @@ void init_matriz(int **&matrix, int filas, int columnas){
 			// matrix[i][j] = sequencial;
 			matrix[i][j] = 0;
 			sequencial++;
+		}
+	}
+
+}
+
+void init_matriz_b(string **&matrix, int filas, int columnas){
+    // cout << "init_matriz_b -> " << endl;
+        
+    matrix = new string*[filas];
+	for(int i = 0; i < filas; i++) {
+		matrix[i] = new string[columnas];
+		for(int j = 0; j < columnas; j++) {
+			matrix[i][j] = "0";
 		}
 	}
 
@@ -153,9 +176,9 @@ bool comparar_char(char *&v, char *&w, int i, int j){
 }
 
 // Pag 176 
-void lcs_dp(char *&v, char *&w, int n, int m, int **& matrix_s ){	
+void lcs_dp(char *&v, char *&w, int n, int m, int **& matrix_s, string **& matrix_b ){	
 	// Primero se lee v luego w
-	cout << "lcs_dp -> " << endl;
+	// cout << "lcs_dp -> " << endl;
 	int filas, columnas;
 	
 	filas = n + 1; // w en las filas
@@ -165,34 +188,66 @@ void lcs_dp(char *&v, char *&w, int n, int m, int **& matrix_s ){
 	cout << "columnas: " << columnas << endl;
 
 	// Init
-	init_matriz(matrix_s, filas, columnas );
-	// imprimir_matriz(matrix_s, filas, columnas );
-	
+	init_matriz_s(matrix_s, filas, columnas );
+	init_matriz_b(matrix_b, filas, columnas );	
+	// imprimir_matriz_int(matrix_s, filas, columnas );
+	// imprimir_matriz_string(matrix_b, filas, columnas );
+
 	// Linea 1 - 2
 	for(int i = 0; i < columnas; i++){
        	matrix_s[0][i] = 0;
+       	matrix_b[0][i] = "0";
     }
 
     // Linea 3 - 5
 	for(int j = 1; j < filas; j++){
        	matrix_s[j][0] = 0;
+       	matrix_b[j][0] = "0";
     }
 
-    imprimir_matriz_header(matrix_s, filas, columnas, v, w );
+    // imprimir_matriz_header(matrix_s, filas, columnas, v, w );
     // cout << "max(5,7): " << max(5,7) << endl;
-	
-
-	
+		
 	// Linea 5 - 
 	for(int i = 1; i < filas; i++){
 		for(int j = 1; j < columnas; j++){
 			if( comparar_char(v, w, i - 1, j - 1) ){ // :S
-				
-			}
-		
+				matrix_s[i][j] = matrix_s[i-1][j-1] + 1;
+				matrix_b[i][j] = "D"; // Diagonal
+			}else if( matrix_s[i-1][j] >= matrix_s[i][j - 1] ){
+				matrix_s[i][j] = matrix_s[i-1][j];
+				matrix_b[i][j] = "U"; // Up - Eliminación
+			}else{
+				matrix_s[i][j] = matrix_s[i][j-1];
+				matrix_b[i][j] = "L"; // Izquierda - Insercion
+			}			
 	    }
     }
 
+    // cout << "S: " << endl;
+    // imprimir_matriz_int(matrix_s, filas, columnas );
+    // cout << "b: " << endl;
+	// imprimir_matriz_string(matrix_b, filas, columnas );
+
+}
+
+// Pag 176 
+void imprimir_lcs(string **& b, char *&v, int i, int j ){	
+	
+	if( i == 0 || j == 0){ // :S
+		return;
+    }
+    
+    if( b[i][j].compare( "D" ) == 0 ){    	    	
+    	imprimir_lcs(b, v, i - 1, j - 1 );
+    	cout << v[i - 1]; // Fix    	
+    }else{
+    	if(  b[i][j].compare( "U" ) == 0  ){
+    		imprimir_lcs(b, v, i - 1, j);
+    	}else{
+    		imprimir_lcs(b, v, i, j - 1 );
+    	}
+    } 
 }
 
 
@@ -200,11 +255,14 @@ void lcs_dp(char *&v, char *&w, int n, int m, int **& matrix_s ){
 int main(int argc, const char* argv[]) {	
 	cout << endl << "./dp.exe < lcs.data" <<  endl;
 
-	int** matrix_s = nullptr;
+	int** matrix_s = nullptr; // S
+	string** matrix_b = nullptr; // b
 	
 	char* v;
-	char* w; // secuencias a comparar		
-	int n, m; // Tamaño de secuencias
+	char* w; // secuencias a comparar
+
+	int n; // Tamaño de las secuencia v: filas
+	int m; // Tamaño de las secuencia w: columnas
 	
 	leer_sequencias(v, w, n, m);
 	cout << endl << "Valores Iniciales " << endl;
@@ -214,10 +272,21 @@ int main(int argc, const char* argv[]) {
 	int maxima_distancia = 0;
 	// Calcular tiempo transcurrido.
   	auto t1 = chrono::high_resolution_clock::now();
-  	lcs_dp(v, w, n, m, matrix_s);
+  	lcs_dp(v, w, n, m, matrix_s, matrix_b);
   	auto t2 = chrono::high_resolution_clock::now();
+
+  	cout << "S: " << endl;
+    imprimir_matriz_header(matrix_s, n + 1, m + 1, v, w);
+    cout << "b: " << endl;
+	imprimir_matriz_string(matrix_b, n + 1, m + 1 );
+
+	// cout << "matrix_b[7][8]: " << matrix_b[7][8] << endl;
+
+	cout << "imprimir_lcs: " << endl;
+	imprimir_lcs(matrix_b, v, n , m); cout << endl;
 
 	// cout << endl << "maxima distancia = " <<  maxima_distancia << endl; 
 	cout << "Tiempo ejecucion (ns) = " << chrono::duration_cast<chrono::nanoseconds>(t2-t1).count() << endl;
+
 }
 
