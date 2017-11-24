@@ -73,26 +73,6 @@ void leer_sequencias(char *&a, char *&b, int &n, int &m ){
 }
 
 
-void imprimir_matriz_int(int **& matrix, int filas, int columnas){
-    // cout << "imprimir_matriz_int -> " << endl;
-    for(int i = 0; i != filas; i++){
-        for(int j = 0; j != columnas; j++){
-        	cout << matrix[i][j] << " ";
-        }            
-        cout << endl;
-    }
-}
-
-void imprimir_matriz_string(string **& matrix, int filas, int columnas){
-    // cout << "imprimir_matriz -> " << endl;
-    for(int i = 0; i != filas; i++){
-        for(int j = 0; j != columnas; j++){
-        	cout << matrix[i][j] << " ";
-        }            
-        cout << endl;
-    }
-}
-
 void imprimir_matriz_header_s(int **& matrix, int filas, int columnas, char *&v, char *&w){
     // cout << "imprimir_matriz -> " << endl;
     // v - n - columnas; w - m - filas
@@ -123,35 +103,8 @@ void imprimir_matriz_header_s(int **& matrix, int filas, int columnas, char *&v,
     }
 }
 
-void imprimir_matriz_header_p(string **& matrix, int filas, int columnas, char *&v, char *&w){
-    // cout << "imprimir_matriz_header_b -> " << endl;
-    // v - n - columnas; w - m - filas
-    int next = 0;
-    for(int i = 0; i != filas; i++){
-    	if(i == 0){
-    		cout << "    "; // Fix
-    		for (int k = 0; k != columnas - 1 ; k++){
-				cout << w[k] << " ";
-			}
-			cout << endl;
-    	}
-
-        for(int j = 0; j != columnas; j++){
-        	if(j == 0 && i > 0){
-        		cout << v[next] << " ";
-        		next++;
-			}else if(i == 0 && j == 0){
-				cout << "  ";
-			}
-        	cout << matrix[i][j] << " ";
-        }            
-        cout << endl;
-    }
-}
-
-
-void init_matriz_s(int **&matrix, int filas, int columnas){
-    // cout << "init_matriz_s -> " << endl;
+void init_matrix(int **&matrix, int filas, int columnas){
+    // cout << "init_matrix -> " << endl;
     int sequencial = 0;
     
     matrix = new int*[filas];
@@ -161,19 +114,6 @@ void init_matriz_s(int **&matrix, int filas, int columnas){
 			// matrix[i][j] = sequencial;
 			matrix[i][j] = 0;
 			sequencial++;
-		}
-	}
-
-}
-
-void init_matriz_b(string **&matrix, int filas, int columnas){
-    // cout << "init_matriz_b -> " << endl;
-        
-    matrix = new string*[filas];
-	for(int i = 0; i < filas; i++) {
-		matrix[i] = new string[columnas];
-		for(int j = 0; j < columnas; j++) {
-			matrix[i][j] = "0";
 		}
 	}
 
@@ -239,8 +179,8 @@ void calcular_similaridad(char *&v, char *&w, int n, int m, int g, int **& p, in
 	// cout << "columnas: " << columnas << endl;
 
 	// Init
-	init_matriz_s(S, filas, columnas );
-	init_matriz_s(p, filas, columnas );
+	init_matrix(S, filas, columnas );
+	init_matrix(p, filas, columnas );
 
 	// Obtener penalización para p
 	obtener_p(p, filas, columnas, v, w);
