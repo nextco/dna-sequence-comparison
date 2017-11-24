@@ -1,4 +1,4 @@
-// ga.cpp
+// Alineamiento Global
 #include <iostream> // cout 
 #include <algorithm> // max
 #include <random> //
@@ -235,8 +235,8 @@ void calcular_similaridad(char *&v, char *&w, int n, int m, int g, int **& p, in
 	filas = n + 1; // w en las filas
 	columnas = m + 1; // v en las columnas
 
-	cout << "filas: " << filas << endl; // v - n - columnas; w - m - filas
-	cout << "columnas: " << columnas << endl;
+	// cout << "filas: " << filas << endl; // v - n - columnas; w - m - filas
+	// cout << "columnas: " << columnas << endl;
 
 	// Init
 	init_matriz_s(S, filas, columnas );
@@ -255,48 +255,88 @@ void calcular_similaridad(char *&v, char *&w, int n, int m, int g, int **& p, in
        	S[j][0] = j*g;
     }
 
+    /*
     cout << endl << "S: " << endl;
 	imprimir_matriz_header_s(S, filas, columnas, v, w );
 
 	cout << endl << "p: " << endl;
 	imprimir_matriz_header_s(p, filas, columnas, v, w );
+	*/
 
 	// cout << "maximo(5,3,4): " << maximo(5, maximo(3, 4)) << endl;
 	// Linea 7	
 	for(int i = 1; i < filas; i++){
 		for(int j = 1; j < columnas; j++){
-			int a = S[i-1][j-1] + p[i][j];
-			int b = S[i][j-1] + g;
-			int c = S[i-1][j] + g;
+			
+			int a = S[i-1][j] + g;
+			int b = S[i-1][j-1] + p[i][j];
+			int c = S[i][j-1] + g;			
 
 			S[i][j] = maximo( a, maximo(b, c) );
 	    }
     }
 	
-	cout << endl << "S: " << endl;
-	imprimir_matriz_header_s(S, filas, columnas, v, w );
+	// cout << endl << "S: " << endl;
+	// imprimir_matriz_header_s(S, filas, columnas, v, w );
 
 }
 
-
-
-// Pag 176 
-void imprimir_lcs(string **& b, char *&v, int i, int j ){	
-	
-	if( i == 0 || j == 0){ // :S
+// Pag 177
+void alineamiento_global(int **& S, int i , int j, int L, char *&v, char *&w, int **& p, int g,
+	string &alinea_vl, string &alinea_wl){
+	// cout << "ag -> " << i << ", " << j << endl; 
+	if( i == 0 && j == 0){
+		L = 0;
 		return;
+    }else if(i > 0 && ( S[i][j] == S[i-1][j] + g) ){
+    	alineamiento_global(S, i-1, j, L, v, w, p, g, alinea_vl, alinea_wl);
+    	L++;
+
+    	cout << "vl: "<< v[i-1];
+    	cout << ", wl: "<< '-' << endl;
+
+    	alinea_wl.push_back( v[i - 1] );
+    	alinea_wl.push_back( '-' );
+
+    }else if( i > 0 && j > 0 && ( S[i][j] == S[i-1][j-1] + p[i][j]) ){
+    	alineamiento_global(S, i-1, j-1, L, v, w, p, g, alinea_vl, alinea_wl);
+    	L++;
+    	
+    	cout << "vl: "<< v[i-1];
+    	cout << ", wl: "<< w[j-1] << endl;
+
+    	alinea_vl.push_back( v[i - 1] );
+    	alinea_wl.push_back( w[j - 1] );
+
+    }else if( j > 0 && ( S[i][j] == S[i][j-1] + g) ){
+    	alineamiento_global(S, i, j-1, L, v, w, p, g, alinea_vl, alinea_wl);
+    	L++;
+
+    	cout << "vl: "<< '-';
+    	cout << ", wl: "<< w[j-1] << endl;
+    	alinea_vl.push_back( '-' );
+    	alinea_wl.push_back( w[j - 1] );
     }
-    
-    if( b[i][j].compare( "D" ) == 0 ){    	    	
-    	imprimir_lcs(b, v, i - 1, j - 1 );
-    	cout << v[i - 1]; // Fix    	
-    }else{
-    	if(  b[i][j].compare( "U" ) == 0  ){
-    		imprimir_lcs(b, v, i - 1, j);
-    	}else{
-    		imprimir_lcs(b, v, i, j - 1 );
-    	}
-    } 
+}
+
+
+void obtener_indels(string &alinea_vl, int &inserciones, string &alinea_wl, int &eliminaciones){
+	// cout << "obtener_indels -> " << endl; 
+	inserciones = 0;
+	for (int i = 0; i != alinea_vl.length(); i++){
+		// cout << alinea_vl[i];
+		if(alinea_vl[i] == '-' ){
+		 	inserciones++;
+		}
+	}
+
+	eliminaciones = 0;
+	for (int i = 0; i != alinea_wl.length(); i++){
+		if(alinea_wl[i] == '-'){
+			eliminaciones++;
+		}
+	}
+	
 }
 
 
@@ -305,10 +345,8 @@ int main(int argc, const char* argv[]) {
 	cout << endl << "./lcs-dp.exe < lcs.data" <<  endl;
 
 	int g = -2; // gap
-	int** matrix_p = nullptr; // p 
-
 	int** matrix_s = nullptr; // S
-	string** matrix_b = nullptr; // b
+	int** matrix_p = nullptr; // p
 	
 	char* v;
 	char* w; // secuencias a comparar
@@ -320,27 +358,29 @@ int main(int argc, const char* argv[]) {
 	cout << endl << "Valores Iniciales " << endl;
 	cout << "v: "; imprimir_chars(v, n); cout << "=> "<< n << endl;
 	cout << "w: "; imprimir_chars(w, m); cout << "=> "<< m << endl;
-		
-	auto t1 = chrono::high_resolution_clock::now();  	
-  	calcular_similaridad(v, w, n, m, g, matrix_p, matrix_s);
+	
+	calcular_similaridad(v, w, n, m, g, matrix_p, matrix_s);
 
-  	auto t2 = chrono::high_resolution_clock::now();
-
-  	/*
   	cout << endl << "S: " << endl;
-    imprimir_matriz_header(matrix_s, n + 1, m + 1, v, w); // n + 1: filas, m + 1: columnas
-    cout << endl << "b: " << endl;
-	imprimir_matriz_string(matrix_b, n + 1, m + 1 );
+	imprimir_matriz_header_s(matrix_s, n+1, m+1, v, w );
 
-	// cout << "matrix_b[7][8]: " << matrix_b[7][8] << endl;
+	cout << endl << "p: " << endl;
+	imprimir_matriz_header_s(matrix_p, n+1, m+1, v, w );
+	
+	int L = 0; // Longitud de alineamiento ?
+	string alinea_vl;
+	string alinea_wl;
+	// 
+	cout << endl;
+	alineamiento_global(matrix_s, n , m, L, v, w, matrix_p, g, alinea_vl, alinea_wl); cout << endl;
+	
+	// Interpretacion
+	int inserciones, eliminaciones;
+	obtener_indels(alinea_vl, inserciones, alinea_wl, eliminaciones);
 
-	cout << endl << "imprimir_lcs: " ;
-	imprimir_lcs(matrix_b, v, n , m); cout << endl;
-	cout << "tamano_lcs: " << matrix_s[n][m] << endl;
-
-	// cout << endl << "maxima distancia = " <<  maxima_distancia << endl; 
-	cout << "Tiempo ejecucion (ns) = " << chrono::duration_cast<chrono::nanoseconds>(t2-t1).count() << endl;
-	*/
+	cout << endl << "Resultados de Alineamiento Global e Interpretacion; para transformar v en w se requieren: "<< endl;
+	cout << "alinea_vl: " << alinea_vl << "=> " << inserciones << " inserciones" << endl;
+	cout << "alinea_wl: " << alinea_wl << "=> " << eliminaciones <<" eliminaciones" << endl;
 
 }
 
