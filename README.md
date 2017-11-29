@@ -1,17 +1,21 @@
 # DNA Sequence Comparison on Bioinformatics
 
-Implement the algorithms Hamming Distance, Longest Common Subsequence.<br/>
+C++ Implementations of the algorithms: Hamming Distance, Longest Common Subsequence, Global Alignment & Local Alignment.<br/>
 <p align="center">
   <img src="img/banner.png" />
 </p>
 
 
 ## Data
-/lcs.data
+input/lcs.data
 
 ## Structure
 <pre>
-	/lcs-dp.cpp - Name
+	/lcs-dp.cpp - Longest Common Subsequence (DP)
+	/ga.cpp - Global Alignment
+	/la.cpp - Local Alignment
+	basic/hamming-distance.cpp - Hamming Distance
+	basic/lcs-recursivo.cpp - Longest Common Subsequence (Recursive)
 </pre>
 
 ## Compilation (x64 Native Tools Command Prompt for VS 2017 or g++)
@@ -19,14 +23,14 @@ cl srs.cpp <br/>
 g++ lcs-dp.cpp -O3 -o srs
 
 ## Execution
-lcs-dp.cpp < input.data <br/>
+./lcs-dp.exe < input\lcs.data <br/>
 
 ## Results
 <br/>
 
 ![](./img/lcs-dp.png)<br/>
-![](img/future.png)<br/>
-![](img/future.png)
+![](./img/ga.png)<br/>
+![](./img/la.png)
 
 
 ## Downloads

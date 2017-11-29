@@ -235,7 +235,7 @@ void alineamiento_global(int **& S, int i , int j, int L, char *&v, char *&w, in
     	cout << "vl: "<< v[i-1];
     	cout << ", wl: "<< '-' << endl;
 
-    	alinea_wl.push_back( v[i - 1] );
+    	alinea_vl.push_back( v[i - 1] );
     	alinea_wl.push_back( '-' );
 
     }else if( i > 0 && j > 0 && ( S[i][j] == S[i-1][j-1] + p[i][j]) ){
@@ -282,7 +282,7 @@ void obtener_indels(string &alinea_vl, int &inserciones, string &alinea_wl, int 
 
 
 int main(int argc, const char* argv[]) {	
-	cout << endl << "./lcs-dp.exe < lcs.data" <<  endl;
+	cout << endl << "./ga.exe < ga.data" <<  endl;
 
 	int g = -2; // gap
 	int** matrix_s = nullptr; // S

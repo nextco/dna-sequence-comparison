@@ -374,7 +374,7 @@ void obtener_alineacion(char *&v, int n, char *&w, int m, string &alinea_vl, str
 
 
 int main(int argc, const char* argv[]) {	
-	cout << endl << "./lcs-dp.exe < lcs.data" <<  endl;
+	cout << endl << "./la.exe < la.data" <<  endl;
 
 	int g = -2; // gap
 	int** matrix_s = nullptr; // S
@@ -393,8 +393,8 @@ int main(int argc, const char* argv[]) {
 	
 	calcular_similaridad(v, w, n, m, g, matrix_p, matrix_s);
 
-	cout << endl << "p: " << endl;
-	imprimir_matriz_header_s(matrix_p, n+1, m+1, v, w );
+	// cout << endl << "p: " << endl;
+	// imprimir_matriz_header_s(matrix_p, n+1, m+1, v, w );
 
   	cout << endl << "S: " << endl;
 	imprimir_matriz_header_s(matrix_s, n+1, m+1, v, w );
